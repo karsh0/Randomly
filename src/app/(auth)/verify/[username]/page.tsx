@@ -1,42 +1,75 @@
 "use client"
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { useRouter } from "next/navigation";
-import { useRef } from "react";
 
-export default function Verify({params}:{params: {username:string}}){
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { useRouter } from "next/navigation"
+import { useRef } from "react"
+import { motion } from "framer-motion"
 
-    const codeRef = useRef<HTMLInputElement | null>(null)
-    const router = useRouter()
+export default function Verify({ params }: { params: { username: string } }) {
+  const codeRef = useRef<HTMLInputElement | null>(null)
+  const router = useRouter()
 
-    async function verifyOTP(){
-        const verification_code = codeRef.current?.value
-        const { username } = await(params)
+  async function verifyOTP() {
+    const otp = codeRef.current?.value?.trim()
 
-        const res = await fetch('/api/auth/verify-otp',{
-            method:"POST",
-             headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    username,
-                    otp:verification_code
-                }),
-        }) 
+    if (!otp) return
 
-        const data = await res.json();
-        console.log(data)
+    const res = await fetch("/api/auth/verify-otp", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: params.username,
+        otp,
+      }),
+    })
 
-        if(res.ok){
-            router.push('/signin')
-        }
+    const data = await res.json()
+    console.log(data)
+
+    if (res.ok) {
+      router.push("/signin")
+    } else {
+      alert("Invalid OTP. Try again.")
     }
+  }
 
-    return <div className="w-screen h-screen bg-black flex justify-center items-center text-white">
-        <div className="w-xl flex flex-col gap-4">
-            <span className="text-3xl font-semibold">Verification</span>
-            <Input className="w-full border-gray-400 outline-none px-4 py-5" ref={codeRef} placeholder="Enter OTP"/>
-            <Button className="py-5 text-lg" variant={"secondary"} onClick={verifyOTP}>Verify</Button>
-        </div>
+  return (
+    <div className="w-screen h-screen bg-black flex justify-center items-center px-4 text-white font-['Poppins']">
+      <motion.div
+        className="w-full max-w-md bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl px-8 py-10 flex flex-col gap-6"
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        <h2 className="text-3xl font-bold text-center">Verify Your Email</h2>
+        <p className="text-center text-white/60 text-sm">
+          Enter the 6-digit code sent to your email
+        </p>
+
+        <Input
+          ref={codeRef}
+          placeholder="Enter OTP"
+          className="bg-white/10 border border-white/20 placeholder-white/50 text-white focus-visible:ring-0"
+        />
+
+        <Button
+          variant="secondary"
+          className="py-5 text-lg hover:scale-[1.02] transition-all"
+          onClick={verifyOTP}
+        >
+          Verify
+        </Button>
+
+        <p className="text-sm text-center text-white/50">
+          Didn’t receive the code?{" "}
+          <span className="underline cursor-pointer hover:text-white">
+            Resend
+          </span>
+        </p>
+      </motion.div>
     </div>
+  )
 }
