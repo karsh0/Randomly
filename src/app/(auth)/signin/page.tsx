@@ -26,7 +26,7 @@ export default function Signin() {
         })
 
         if(res.ok){
-            router.push('/')
+            router.push('/dashboard')
         }
     }
 

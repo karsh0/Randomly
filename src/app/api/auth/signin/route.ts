@@ -1,37 +1,23 @@
-import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@prisma/index";
+import { prisma } from "@prisma/index"
+import { setSession } from "@/lib/session"
+import { NextRequest, NextResponse } from "next/server"
 
+export async function POST(req: NextRequest) {
+  const { username, password } = await req.json()
 
-export async function POST(req: NextRequest){
-    const {username, password} = await req.json()
+  try {
+    const user = await prisma.user.findFirst({
+      where: { username, password, email_verified: true },
+    })
 
-    if(!username || !password){
-        return NextResponse.json({
-            message:"Invalid fields"
-        })
+    if (!user) {
+      return NextResponse.json({ message: "Invalid credentials" }, { status: 401 })
     }
 
-    try{
-        const user = await prisma.user.findFirst({
-            where:{
-                username,
-                password
-            }
-        })
-        
-        if(!user){
-            return NextResponse.json({
-                message:"user not found"
-            })
-        }
+    const res = NextResponse.json({ message: "Signed in" })
+    return setSession(res, { username: user.username })
 
-        return NextResponse.json({
-            message:"signin successfull"
-        })
-    }catch(e){
-        console.log(e)
-        return NextResponse.json({
-            message:"Internal server error"
-        })
-    }
+  } catch (e) {
+    return NextResponse.json({ message: "Internal error" }, { status: 500 })
+  }
 }
