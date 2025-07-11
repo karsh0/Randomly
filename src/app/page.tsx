@@ -8,7 +8,6 @@ import { sampleUsers } from "@/lib/sample"
 
 export default function Home() {
   const router = useRouter()
-
   return (
     <div className="relative w-screen h-screen bg-black text-white font-['Poppins'] overflow-hidden">
 

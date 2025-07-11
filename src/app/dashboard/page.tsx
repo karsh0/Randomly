@@ -9,6 +9,7 @@ import { useEffect, useState } from "react"
 import { Copy, RefreshCw } from "lucide-react"
 import { toast, Toaster } from "sonner"
 import { motion } from "framer-motion"
+import { SessionProvider, useSession } from "next-auth/react"
 
 type Message = {
   text: string
@@ -17,8 +18,9 @@ type Message = {
 export default function Dashboard() {
   const [acceptMessages, setAcceptMessages] = useState(false)
   const [messages, setMessages] = useState<Message[]>([])
-
-  const username = "karan" // dynamically fetch if needed
+  const {data:session} = useSession()
+  console.log(session)
+  const username = session?.user.username// dynamically fetch if needed
   const userLink = `http://localhost:3000/u/${username}`
 
   const copyToClipboard = () => {

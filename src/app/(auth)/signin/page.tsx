@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input"
 import { useRouter } from "next/navigation"
 import { useRef } from "react"
 import { motion } from "framer-motion"
+import { signIn } from "next-auth/react"
 
 export default function Signin() {
   const usernameRef = useRef<HTMLInputElement | null>(null)
@@ -12,23 +13,24 @@ export default function Signin() {
   const router = useRouter()
 
   async function handleSignin() {
-    const username = usernameRef.current?.value
-    const password = passwordRef.current?.value
+  const username = usernameRef.current?.value;
+  const password = passwordRef.current?.value;
 
-    if (!username || !password) return
+  if (!username || !password) return;
 
-    const res = await fetch("/api/auth/signin", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }),
-    })
+  const res = await signIn("credentials", {
+    redirect: false,
+    username,
+    password,
+    callbackUrl: "/dashboard",
+  });
 
-    if (res.ok) {
-      router.push("/dashboard")
-    } else {
-      alert("Invalid credentials") // You can replace this with `toast.error()`
-    }
+  if (res?.ok) {
+    router.push("/dashboard");
+  } else {
+    alert("Invalid credentials");
   }
+}
 
   return (
     <div className="w-screen h-screen bg-black flex justify-center items-center px-4 text-white font-['Poppins']">
