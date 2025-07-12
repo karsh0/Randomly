@@ -2,21 +2,22 @@
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { useRef } from "react"
 import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
+import { useForm } from "react-hook-form"
+import { Loader2 } from "lucide-react"
 
 export default function Signup() {
-  const usernameRef = useRef<HTMLInputElement | null>(null)
-  const emailRef = useRef<HTMLInputElement | null>(null)
-  const passwordRef = useRef<HTMLInputElement | null>(null)
   const router = useRouter()
 
-  async function handleSignup() {
-    const username = usernameRef.current?.value
-    const email = emailRef.current?.value
-    const password = passwordRef.current?.value
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm()
 
+  async function handleSignup(data: any) {
+    const { username, email, password } = data
     if (!username || !email || !password) return
 
     const res = await fetch("/api/auth/signup", {
@@ -32,7 +33,6 @@ export default function Signup() {
       return
     }
 
-    // send OTP
     try {
       await fetch("/api/auth/send-otp", {
         method: "POST",
@@ -47,40 +47,55 @@ export default function Signup() {
   }
 
   return (
-    <div className="w-screen h-screen bg-black flex justify-center items-center px-4 text-white font-['Poppins']">
+    <div className="min-h-screen w-full bg-black flex items-center justify-center px-4 font-['Poppins'] text-white">
       <motion.div
-        className="w-full max-w-md bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl px-8 py-10 flex flex-col gap-6"
-        initial={{ opacity: 0, y: 40 }}
+        className="w-full max-w-md bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-8 space-y-6"
+        initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        <h2 className="text-3xl font-bold text-center">Create Your Account</h2>
+        <h2 className="text-3xl font-bold text-center mb-2">Create an Account</h2>
 
-        <Input
-          placeholder="Username"
-          ref={usernameRef}
-          className="bg-white/10 border border-white/20 placeholder-white/50 text-white focus-visible:ring-0"
-        />
-        <Input
-          type="email"
-          placeholder="Email"
-          ref={emailRef}
-          className="bg-white/10 border border-white/20 placeholder-white/50 text-white focus-visible:ring-0"
-        />
-        <Input
-          type="password"
-          placeholder="Password"
-          ref={passwordRef}
-          className="bg-white/10 border border-white/20 placeholder-white/50 text-white focus-visible:ring-0"
-        />
+        <form className="space-y-5" onSubmit={handleSubmit(handleSignup)}>
+          <div>
+            <label className="block text-sm mb-1 text-white/70">Username</label>
+            <Input
+              {...register("username", { required: true })}
+              className="bg-white/10 border border-white/20 placeholder-white/50 text-white focus-visible:ring-0"
+            />
+            {errors.username && <p className="text-xs text-red-500 mt-1">Username is required</p>}
+          </div>
 
-        <Button
-          variant="secondary"
-          className="py-5 text-lg hover:scale-[1.02] transition-all"
-          onClick={handleSignup}
-        >
-          Sign Up
-        </Button>
+          <div>
+            <label className="block text-sm mb-1 text-white/70">Email</label>
+            <Input
+              type="email"
+              {...register("email", { required: true })}
+              className="bg-white/10 border border-white/20 placeholder-white/50 text-white focus-visible:ring-0"
+            />
+            {errors.email && <p className="text-xs text-red-500 mt-1">Email is required</p>}
+          </div>
+
+          <div>
+            <label className="block text-sm mb-1 text-white/70">Password</label>
+            <Input
+              type="password"
+              {...register("password", { required: true })}
+              className="bg-white/10 border border-white/20 placeholder-white/50 text-white focus-visible:ring-0"
+            />
+            {errors.password && <p className="text-xs text-red-500 mt-1">Password is required</p>}
+          </div>
+
+          <Button
+            variant="secondary"
+            className="w-full py-5 text-lg hover:scale-[1.02] transition-all flex items-center justify-center"
+            type="submit"
+            disabled={isSubmitting}
+          >
+            {isSubmitting && <Loader2 className="w-5 h-5 mr-2 animate-spin" />}
+            {isSubmitting ? "Signing up..." : "Sign up"}
+          </Button>
+        </form>
 
         <p className="text-sm text-center text-white/50">
           Already have an account?{" "}

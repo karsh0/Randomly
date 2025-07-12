@@ -3,14 +3,6 @@ import { PrismaAdapter } from "@auth/prisma-adapter"
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
-interface userType{
-    id: string,
-    username: string,
-    email: string,
-    password: string,
-    email_verified: boolean
-}
-
 export const authOptions: NextAuthOptions = {
     adapter: PrismaAdapter(prisma),
     providers: [
@@ -69,7 +61,7 @@ export const authOptions: NextAuthOptions = {
     session:{
         strategy:"jwt"
     },
-    secret:process.env.AUTH_SECRET,
+    secret:process.env.NEXTAUTH_SECRET,
     pages:{
         signIn:'/signin'
     }

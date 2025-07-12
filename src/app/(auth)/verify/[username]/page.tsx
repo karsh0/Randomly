@@ -27,7 +27,6 @@ export default function Verify({ params }: { params: { username: string } }) {
     })
 
     const data = await res.json()
-    console.log(data)
 
     if (res.ok) {
       router.push("/signin")

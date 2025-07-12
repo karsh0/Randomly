@@ -6,22 +6,28 @@ import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import { useEffect, useState } from "react"
-import { Copy, RefreshCw } from "lucide-react"
+import { ArrowLeft, Copy, RefreshCw } from "lucide-react"
 import { toast, Toaster } from "sonner"
 import { motion } from "framer-motion"
-import { SessionProvider, useSession } from "next-auth/react"
+import { useSession } from "next-auth/react"
+import { useRouter } from "next/navigation"
+import { Message } from "@/types/types"
 
-type Message = {
-  text: string
-}
 
 export default function Dashboard() {
   const [acceptMessages, setAcceptMessages] = useState(false)
   const [messages, setMessages] = useState<Message[]>([])
-  const {data:session} = useSession()
-  console.log(session)
-  const username = session?.user.username// dynamically fetch if needed
+  const session = useSession()
+  const username = session.data?.user.username;
   const userLink = `http://localhost:3000/u/${username}`
+
+  const router = useRouter()
+  const isUserLoggedOut = session.status === "unauthenticated"
+
+  if (isUserLoggedOut) {
+    router.replace('/')
+  }
+
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(userLink)
@@ -35,11 +41,20 @@ export default function Dashboard() {
   }
 
   useEffect(() => {
-    refreshMessages()
+    if(session.status === "authenticated"){
+      refreshMessages()
+    }
   }, [])
 
   return (
-    <div className="w-screen min-h-screen bg-black text-white flex justify-center items-start px-6 py-12 font-['Poppins']">
+    <div className="w-full min-h-screen bg-black text-white flex justify-center items-start px-4 md:px-6 py-12 font-['Poppins']">
+      <motion.button
+        className="bg-transparent cursor-pointer flex items-center"
+        whileHover={{ x: -5 }}
+        transition={{ duration: 0.2 }}
+      >
+        <ArrowLeft className="w-6 h-6 cursor-pointer hover:" onClick={() => router.push('/')} />
+      </motion.button>
       <motion.div
         className="w-full max-w-4xl flex flex-col gap-10"
         initial={{ opacity: 0, y: 40 }}
@@ -47,7 +62,7 @@ export default function Dashboard() {
         transition={{ duration: 0.6 }}
       >
         <motion.h1
-          className="text-4xl font-bold text-center"
+          className="text-4xl md:text-5xl font-bold text-center md:mb-10"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
@@ -55,7 +70,6 @@ export default function Dashboard() {
           Welcome back, <span className="text-white/90">{username}</span>
         </motion.h1>
 
-        {/* Shareable Link */}
         <motion.div
           className="flex flex-col gap-2"
           initial={{ opacity: 0, y: 20 }}
@@ -65,7 +79,7 @@ export default function Dashboard() {
           <Label className="text-lg font-medium">Your anonymous message link</Label>
           <div className="relative">
             <Input
-              className="bg-white/5 text-white border border-white/10 pr-12"
+              className="bg-white/5 text-white border border-white/10 pr-12 py-7"
               value={userLink}
               disabled
             />
@@ -80,7 +94,6 @@ export default function Dashboard() {
           </div>
         </motion.div>
 
-        {/* Toggle */}
         <motion.div
           className="flex items-center justify-between bg-white/5 border border-white/10 rounded-xl px-4 py-3"
           initial={{ opacity: 0, y: 20 }}
@@ -94,7 +107,6 @@ export default function Dashboard() {
           />
         </motion.div>
 
-        {/* Refresh */}
         <motion.div
           className="flex justify-end"
           initial={{ opacity: 0 }}
@@ -106,7 +118,6 @@ export default function Dashboard() {
           </Button>
         </motion.div>
 
-        {/* Messages */}
         <motion.div
           className="grid gap-5 grid-cols-1 sm:grid-cols-2"
           initial="hidden"

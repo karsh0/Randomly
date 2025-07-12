@@ -1,55 +1,79 @@
 "use client"
+
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { toast, Toaster } from "sonner"
 import { Textarea } from "@/components/ui/textarea"
-import { useRef } from "react"
+import { useForm } from "react-hook-form"
+import { Loader2 } from "lucide-react"
 
-export default async function PublicProfile({username}:{username: string}) {
-    const messageRef = useRef<HTMLTextAreaElement | null>(null)
+export default function PublicProfile({ username }: { username: string }) {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm()
 
-    async function sendMessage(){
-        const message = messageRef.current?.value
-        const res = await fetch('/api/send-message',{
-            method:"POST",
-            headers:{
-                'Content-type':'Application/json'
-            },
-            body:JSON.stringify({
-                username,
-                message
-            })
-        })
+  async function sendMessage(data: any) {
+    const message = data.message?.trim()
 
-
-        if(res.ok){
-            toast.success('Message sent successfully')
-        }
+    if (!message) {
+      toast.error("Message cannot be empty")
+      return
     }
 
-    return (
-        <div className="w-screen min-h-screen bg-black text-white flex justify-center items-start p-8">
-            <div className="w-full max-w-3xl flex flex-col gap-8">
-                <h1 className="text-4xl font-bold text-center">Public Profile Link</h1>
+    const res = await fetch("/api/send-message", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username,
+        message,
+      }),
+    })
 
-                <div className="w-full flex flex-col gap-4">
-                    <Label className="text-lg">Send Anonymous Message to @{username}</Label>
-                    <Textarea
-                        className="bg-transparent h-40"
-                        placeholder="Enter your messages"
-                        ref={messageRef}
-                        />
-                    <Button
-                        size="icon"
-                        variant="secondary"
-                        className="w-full"
-                        onClick={sendMessage}
-                    >Send message
-                    </Button>
-                </div>
+    if (res.ok) {
+      toast.success("Message sent successfully!")
+      reset()
+    } else {
+      toast.error("Failed to send message. Try again.")
+    }
+  }
 
-            </div>
-            <Toaster />
-        </div>
-    )
+  return (
+    <div className="w-screen min-h-screen bg-black text-white flex justify-center items-start px-6 py-20 font-['Poppins']">
+      <div className="w-full max-w-3xl flex flex-col gap-8">
+        <h1 className="text-4xl sm:text-5xl font-bold text-center">
+          Send a message
+        </h1>
+
+        <form onSubmit={handleSubmit(sendMessage)} className="flex flex-col gap-5">
+          <div className="flex flex-col gap-2">
+            <Label className="text-lg">Anonymous Message to @{username}</Label>
+            <Textarea
+              className="bg-white/5 border border-white/10 text-white placeholder-white/50 focus-visible:ring-1 focus-visible:ring-white/30 h-40"
+              placeholder="Type your message here..."
+              {...register("message", { required: true })}
+            />
+            {errors.message && (
+              <p className="text-sm text-red-500">Message is required</p>
+            )}
+          </div>
+
+          <Button
+            variant="secondary"
+            type="submit"
+            className="w-full py-5 text-lg flex items-center justify-center gap-2 hover:scale-[1.02] transition-all"
+            disabled={isSubmitting}
+          >
+            {isSubmitting && <Loader2 className="w-5 h-5 animate-spin" />}
+            {isSubmitting ? "Sending..." : "Send Message"}
+          </Button>
+        </form>
+      </div>
+      <Toaster richColors />
+    </div>
+  )
 }
