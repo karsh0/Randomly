@@ -1,6 +1,6 @@
 import PublicProfile from "./page"
 
-export default function Layout({params}:{params:{username: string}}) {
-    const { username } = (params)
+export default async function Layout({params}:{params:Promise<any>}) {
+    const { username } = await(params)
     return <PublicProfile username={username}/>
 }
