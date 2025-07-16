@@ -6,14 +6,19 @@ import { toast, Toaster } from "sonner"
 import { Textarea } from "@/components/ui/textarea"
 import { useForm } from "react-hook-form"
 import { Loader2 } from "lucide-react"
+import { useParams } from "next/navigation"
 
-export default function PublicProfile({ username }: { username: string }) {
+
+export default function PublicProfile() {
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors, isSubmitting },
   } = useForm()
+
+
+  const { username } = useParams()
 
   async function sendMessage(data: any) {
     const message = data.message?.trim()
