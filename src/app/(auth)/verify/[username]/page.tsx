@@ -2,13 +2,14 @@
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { useRouter } from "next/navigation"
+import { useParams, useRouter } from "next/navigation"
 import { useRef } from "react"
 import { motion } from "framer-motion"
 
-export default function Verify({ params }: { params: { username: string } }) {
+export default function Verify() {
   const codeRef = useRef<HTMLInputElement | null>(null)
   const router = useRouter()
+  const { username } = useParams()
 
   async function verifyOTP() {
     const otp = codeRef.current?.value?.trim()
@@ -21,7 +22,7 @@ export default function Verify({ params }: { params: { username: string } }) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        username: params.username,
+        username,
         otp,
       }),
     })
