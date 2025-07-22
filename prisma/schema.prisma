@@ -1,6 +1,5 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -13,6 +12,7 @@ model User {
   username        String    @unique
   email           String    @unique
   password        String
+  accept          Boolean   @default(true)
   email_verified  Boolean   @default(false)
   otpCode         String?  
   otpExpiry       DateTime?
@@ -23,5 +23,6 @@ model Message {
   id              String    @id @default(uuid())
   userId          String
   text            String
-  user            User   @relation(fields: [userId], references: [id])
+  time            DateTime?  @default(now())
+  user            User      @relation(fields: [userId], references: [id])
 }

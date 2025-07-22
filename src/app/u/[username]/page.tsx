@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { useForm } from "react-hook-form"
 import { Loader2 } from "lucide-react"
 import { useParams } from "next/navigation"
+import { useRef } from "react"
 
 
 export default function PublicProfile() {
@@ -19,8 +20,23 @@ export default function PublicProfile() {
 
 
   const { username } = useParams()
+  const acceptRef = useRef(false)
 
+  async function isAccepted(){
+    const res = await fetch('/api/accept-messages')
+    const data = await res.json()
+    const accept = data.accept
+    return accept
+  }
+  
   async function sendMessage(data: any) {
+    acceptRef.current = await isAccepted()
+
+    if(acceptRef.current === false){
+      toast.error("Failed to send message. Try again.")
+      return;
+    }
+
     const message = data.message?.trim()
 
     if (!message) {

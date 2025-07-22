@@ -25,12 +25,14 @@ export async function POST(req: NextRequest){
 
         const userId = user.id;
 
-        await prisma.message.create({
+        const m = await prisma.message.create({
             data:{
                 userId,
                 text: message
             }
         })
+
+        console.log(m)
 
         return NextResponse.json(
             {message:"message sent successfully"}

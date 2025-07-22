@@ -40,11 +40,28 @@ export default function Dashboard() {
     setMessages(data)
   }
 
+  const updateAccept = async () => {
+    const res = await fetch(`/api/accept-messages`, {
+      method:"POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        acceptMessages
+      }),
+    })
+    const data = await res.json()
+    console.log(data)
+  }
+
   useEffect(() => {
-    if(session.status === "authenticated"){
       refreshMessages()
-    }
   }, [])
+
+  
+  useEffect(()=>{
+    updateAccept()
+  },[acceptMessages])
 
   return (
     <div className="w-full min-h-screen bg-black text-white flex justify-center items-start px-4 md:px-6 py-12 font-['Poppins']">
@@ -103,7 +120,9 @@ export default function Dashboard() {
           <Label className="text-md font-medium">Accept anonymous messages?</Label>
           <Switch
             checked={acceptMessages}
-            onCheckedChange={setAcceptMessages}
+            onCheckedChange={()=>{
+              setAcceptMessages(prev => !prev)
+            }}
           />
         </motion.div>
 
@@ -150,8 +169,10 @@ export default function Dashboard() {
                 }}
               >
                 <Card className="bg-white/5 border border-white/10 text-white transition-all hover:scale-[1.01] duration-300 rounded-2xl">
-                  <CardContent className="p-4">
+                  <CardContent className="px-4">
                     <div className="text-base">{m.text}</div>
+                   <div className="text-xs text-zinc-300">{new Date(m.time).toLocaleDateString()}</div>
+
                   </CardContent>
                 </Card>
               </motion.div>

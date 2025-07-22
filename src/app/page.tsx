@@ -3,19 +3,37 @@
 import { SliderCard } from "@/components/SliderCard"
 import { Button } from "@/components/ui/button"
 import { useRouter } from "next/navigation"
-import { motion } from "framer-motion"
-import { sampleUsers } from "@/lib/sample"
+import { animate, motion, useAnimation, useMotionValue } from "framer-motion"
+import { sampleUsers, sampleUsers2 } from "@/lib/sample"
 import { signOut, useSession } from "next-auth/react"
+import { useEffect, useRef } from "react"
+import { InfiniteSlider } from "@/components/InfiniteSlider"
 
 export default function Home() {
   const router = useRouter()
   const { status } = useSession()
   const isLoggedIn = status === "authenticated"
+
+
+  const controls = useAnimation()
+
+  useEffect(() => {
+    controls.start({
+      x: ["0%", "-50%"],
+      transition: {
+        duration: 20,
+        ease: "linear",
+        repeat: Infinity,
+      },
+    });
+  }, []);
+
+
   return (
-    <div className="relative w-screen min-h-screen bg-black text-white font-['Poppins'] overflow-hidden">
+    <div className="relative min-h-screen bg-black text-white font-['poppins'] overflow-hidden">
 
       <motion.div
-        className="absolute bottom-[-200px] left-[50%] -translate-x-1/2 rounded-full bg-red-400/20 w-[900px] h-[900px] blur-3xl"
+        className="absolute bottom-[-500px] left-[50%] -translate-x-1/2 rounded-full bg-blue-600/40 w-[1200px] h-[1200px] blur-3xl"
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
         transition={{ duration: 1.2, ease: "easeOut" }}
@@ -37,20 +55,20 @@ export default function Home() {
         >
           {
             isLoggedIn ? <Button
-            className="rounded-2xl px-6 py-2 transition-all hover:scale-105"
-            variant="secondary"
-            onClick={()=>{
-              signOut()
-            }}
-          >
-            Logout
-          </Button> : <Button
-            className="rounded-2xl px-6 py-2 transition-all hover:scale-105"
-            variant="secondary"
-            onClick={() => router.push("/signin")}
-          >
-            Login
-          </Button>
+              className="rounded-2xl px-6 py-2 transition-all hover:scale-105"
+              variant="secondary"
+              onClick={() => {
+                signOut()
+              }}
+            >
+              Logout
+            </Button> : <Button
+              className="rounded-2xl px-6 py-2 transition-all hover:scale-105"
+              variant="secondary"
+              onClick={() => router.push("/signin")}
+            >
+              Login
+            </Button>
           }
         </motion.div>
       </header>
@@ -72,7 +90,7 @@ export default function Home() {
             variant="secondary"
             className="px-7 py-5 transition-transform hover:scale-105"
             onClick={() => {
-              isLoggedIn ? router.push('/dashboard'): router.push('/signup')
+              isLoggedIn ? router.push('/dashboard') : router.push('/signup')
             }}
           >
             Get Started
@@ -80,18 +98,15 @@ export default function Home() {
         </motion.div>
       </main>
 
-      <motion.div
-        className="w-full flex justify-center gap-8 flex-wrap px-6 py-6"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.6, duration: 0.8 }}
-      >
-        {
-          sampleUsers.map((user, i) => (
-            <SliderCard name={user.name} handle={user.handle} message={user.message} key={i}/>
-          ))
-        }
+      <motion.div className="flex flex-col gap-5"
+      initial={{opacity:0}}
+      animate={{opacity:1}}
+      transition={{duration: 0.7}}>
+        <InfiniteSlider data={sampleUsers} distance={-10000}/>
+      <InfiniteSlider data={sampleUsers2} distance={10000}/>
       </motion.div>
     </div>
   )
 }
+
+
