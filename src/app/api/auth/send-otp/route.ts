@@ -4,7 +4,6 @@ import { NextResponse } from "next/server"
 
 export async function POST(req: Request) {
   const { email, username, password } = await req.json()
-
   const code = Math.floor(100000 + Math.random() * 900000).toString()
 
   try {
@@ -44,5 +43,5 @@ export async function POST(req: Request) {
     text: `Your verification code is ${code}`,
   })
 
-  return Response.json({ message: "OTP sent" })
+  return NextResponse.json({ message: "OTP sent" })
 }

@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
 import { useForm } from "react-hook-form"
 import { Loader2 } from "lucide-react"
+import { sendOTP } from "@/lib/auth"
 
 export default function Signup() {
   const router = useRouter()
@@ -34,11 +35,7 @@ export default function Signup() {
     }
 
     try {
-      await fetch("/api/auth/send-otp", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, email }),
-      })
+      await sendOTP({email, username, password})
     } catch (e) {
       console.error("OTP send failed", e)
     }

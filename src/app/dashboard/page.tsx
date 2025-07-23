@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import { useEffect, useState } from "react"
-import { ArrowLeft, Copy, RefreshCw } from "lucide-react"
+import { ArrowLeft, Copy, Delete, RefreshCw, Trash, Trash2 } from "lucide-react"
 import { toast, Toaster } from "sonner"
 import { motion } from "framer-motion"
 import { useSession } from "next-auth/react"
@@ -15,11 +15,11 @@ import { Message } from "@/types/types"
 
 
 export default function Dashboard() {
-  const [acceptMessages, setAcceptMessages] = useState(false)
+  const [acceptMessages, setAcceptMessages] = useState(true)
   const [messages, setMessages] = useState<Message[]>([])
   const session = useSession()
   const username = session.data?.user.username;
-  const userLink = `http://localhost:3000/u/${username}`
+  const userLink = `https://anonymous-f6xv.vercel.app/u/${username}`
 
   const router = useRouter()
   const isUserLoggedOut = session.status === "unauthenticated"
@@ -41,7 +41,7 @@ export default function Dashboard() {
   }
 
   const updateAccept = async () => {
-    const res = await fetch(`/api/accept-messages`, {
+    await fetch(`/api/accept-messages`, {
       method:"POST",
       headers: {
         "Content-Type": "application/json",
@@ -50,8 +50,19 @@ export default function Dashboard() {
         acceptMessages
       }),
     })
-    const data = await res.json()
-    console.log(data)
+  }
+
+  const deleteMessage = async(id: string) =>{
+    await fetch(`/api/delete-message`, {
+      method:"POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id
+      }),
+    })
+    refreshMessages()
   }
 
   useEffect(() => {
@@ -168,7 +179,10 @@ export default function Dashboard() {
                   show: { opacity: 1, y: 0 },
                 }}
               >
-                <Card className="bg-white/5 border border-white/10 text-white transition-all hover:scale-[1.01] duration-300 rounded-2xl">
+                <Card className="bg-white/5 relative border border-white/10 text-white transition-all hover:scale-[1.01] duration-300 rounded-2xl">
+                  <Trash2 className="w-5 h-5 absolute top-3 right-5 cursor-pointer text-red-500" onClick={async()=>{
+                    await deleteMessage(m.id)
+                  }}/>
                   <CardContent className="px-4">
                     <div className="text-base">{m.text}</div>
                    <div className="text-xs text-zinc-300">{new Date(m.time).toLocaleDateString()}</div>

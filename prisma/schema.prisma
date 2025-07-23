@@ -8,21 +8,21 @@ datasource db {
 }
 
 model User {
-  id              String    @id @default(uuid())
-  username        String    @unique
-  email           String    @unique
+  id              String      @id @default(uuid())
+  username        String      @unique
+  email           String      @unique
   password        String
-  accept          Boolean   @default(true)
-  email_verified  Boolean   @default(false)
+  accept          Boolean     @default(true)
+  email_verified  Boolean     @default(false)
   otpCode         String?  
   otpExpiry       DateTime?
   message         Message[]
 }
 
 model Message {
-  id              String    @id @default(uuid())
+  id              String      @id @default(uuid())
   userId          String
   text            String
-  time            DateTime?  @default(now())
-  user            User      @relation(fields: [userId], references: [id])
+  time            DateTime?   @default(now())
+  user            User        @relation(fields: [userId], references: [id])
 }

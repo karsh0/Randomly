@@ -1,5 +1,5 @@
-import { prisma } from "@prisma/index";
 import { NextRequest, NextResponse } from "next/server";
+import { prisma } from "@prisma/index";
 
 export async function POST(req:NextRequest){
     const { username, otp } = await req.json()
@@ -12,24 +12,30 @@ export async function POST(req:NextRequest){
             }
         })
 
-        if(user){
-            await prisma.user.update({
-                where:{
-                    username
-                },
-                data:{
-                    email_verified: true,
-                    otpCode: '123123',
-                }
-            })
-        }
-
         if(!user){
             return NextResponse.json({
                 message:"Invalid otp/email"
             }, {status: 400})
         }
 
+        await prisma.user.update({
+            where:{
+                username
+            },
+            data:{
+                email_verified: true,
+                otpCode: '123123',
+            }
+        })
+        
+
+        return NextResponse.json(
+            { message:"Email verified successfully" },
+            { status: 200 }
+        )
+
+
+        
     }catch(e){
         return NextResponse.json({
             message:"Internal server error"

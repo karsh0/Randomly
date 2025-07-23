@@ -55,7 +55,7 @@ export default function Home() {
         >
           {
             isLoggedIn ? <Button
-              className="rounded-2xl px-6 py-2 transition-all hover:scale-105"
+              className="rounded-2xl px-6 py-2 transition-all hover:scale-105 bg-red-500 text-white hover:bg-red-600"
               variant="secondary"
               onClick={() => {
                 signOut()
@@ -102,8 +102,9 @@ export default function Home() {
       initial={{opacity:0}}
       animate={{opacity:1}}
       transition={{duration: 0.7}}>
-        <InfiniteSlider data={sampleUsers} distance={-10000}/>
-      <InfiniteSlider data={sampleUsers2} distance={10000}/>
+       <InfiniteSlider data={sampleUsers} direction="left" />
+<InfiniteSlider data={sampleUsers2} direction="right" />
+
       </motion.div>
     </div>
   )

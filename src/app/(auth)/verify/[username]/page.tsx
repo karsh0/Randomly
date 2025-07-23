@@ -5,36 +5,12 @@ import { Input } from "@/components/ui/input"
 import { useParams, useRouter } from "next/navigation"
 import { useRef } from "react"
 import { motion } from "framer-motion"
+import { verifyOTP } from "@/lib/auth"
 
 export default function Verify() {
   const codeRef = useRef<HTMLInputElement | null>(null)
-  const router = useRouter()
   const { username } = useParams()
-
-  async function verifyOTP() {
-    const otp = codeRef.current?.value?.trim()
-
-    if (!otp) return
-
-    const res = await fetch("/api/auth/verify-otp", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username,
-        otp,
-      }),
-    })
-
-    const data = await res.json()
-
-    if (res.ok) {
-      router.push("/signin")
-    } else {
-      alert("Invalid OTP. Try again.")
-    }
-  }
+  const router = useRouter()
 
   return (
     <div className="w-screen h-screen bg-black flex justify-center items-center px-4 text-white font-['Poppins']">
@@ -58,10 +34,17 @@ export default function Verify() {
         <Button
           variant="secondary"
           className="py-5 text-lg hover:scale-[1.02] transition-all"
-          onClick={verifyOTP}
+          onClick={async() => {
+            const otp = codeRef.current?.value?.trim() || ""
+            if (username && otp) {
+              await verifyOTP({ username: username.toString(), otp })
+              router.push('/dashboard')
+            }
+          }}
         >
           Verify
         </Button>
+
 
         <p className="text-sm text-center text-white/50">
           Didn’t receive the code?{" "}
