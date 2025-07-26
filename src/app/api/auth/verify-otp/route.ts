@@ -24,7 +24,7 @@ export async function POST(req:NextRequest){
             },
             data:{
                 email_verified: true,
-                otpCode: '123123',
+                otpCode: null,
             }
         })
         

@@ -75,7 +75,7 @@ export default function Dashboard() {
   },[acceptMessages])
 
   return (
-    <div className="w-full min-h-screen bg-black text-white flex justify-center items-start px-4 md:px-6 py-12 font-['Poppins']">
+    <div className="w-full min-h-screen bg-black text-white flex justify-center items-start px-4 md:px-6 py-12 ">
       <motion.button
         className="bg-transparent cursor-pointer flex items-center"
         whileHover={{ x: -5 }}

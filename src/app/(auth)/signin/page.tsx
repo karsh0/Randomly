@@ -1,12 +1,12 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
 import { signIn } from "next-auth/react"
 import { useForm } from "react-hook-form"
 import { Loader2 } from "lucide-react"
+import { toast, Toaster } from "sonner"
 
 export default function Signin() {
   const router = useRouter()
@@ -31,43 +31,43 @@ export default function Signin() {
     if (res?.ok) {
       router.push("/dashboard")
     } else {
-      alert("Invalid credentials")
+      toast.error("Invalid username or password")
     }
   }
 
   return (
-    <div className="w-screen h-screen bg-black flex items-center justify-center px-4 text-white font-['Poppins']">
+    <div className="min-h-screen w-full bg-black flex items-center justify-center px-4 text-white">
       <motion.div
         className="w-full max-w-md bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-8 space-y-6"
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        <h2 className="text-3xl font-bold text-center">Welcome Back</h2>
+        <h2 className="text-4xl font-bold text-center mb-4">Welcome Back</h2>
 
-        <form onSubmit={handleSubmit(handleSignin)} className="space-y-5">
+        <form className="space-y-5" onSubmit={handleSubmit(handleSignin)}>
           <div>
             <label className="block text-sm mb-1 text-white/70">Username</label>
-            <Input
+            <input
               {...register("username", { required: true })}
-              className="bg-white/10 border border-white/20 placeholder-white/50 text-white focus-visible:ring-0"
+              className="w-full p-2 rounded-lg border border-white/20 text-white placeholder:text-white/40 focus:outline-none focus:ring-1 focus:ring-white/40 transition-all"
             />
             {errors.username && <p className="text-xs text-red-500 mt-1">Username is required</p>}
           </div>
 
           <div>
             <label className="block text-sm mb-1 text-white/70">Password</label>
-            <Input
+            <input
               type="password"
               {...register("password", { required: true })}
-              className="bg-white/10 border border-white/20 placeholder-white/50 text-white focus-visible:ring-0"
+              className="w-full p-2 rounded-lg border border-white/20 text-white placeholder:text-white/40 focus:outline-none focus:ring-1 focus:ring-white/40 transition-all"
             />
             {errors.password && <p className="text-xs text-red-500 mt-1">Password is required</p>}
           </div>
 
           <Button
             variant="secondary"
-            className="w-full py-5 text-lg hover:scale-[1.02] transition-all flex items-center justify-center"
+            className="w-full py-6 text-lg hover:scale-[1.01] transition-all flex items-center justify-center"
             type="submit"
             disabled={isSubmitting}
           >
@@ -86,6 +86,7 @@ export default function Signin() {
           </span>
         </p>
       </motion.div>
+      <Toaster />
     </div>
   )
 }

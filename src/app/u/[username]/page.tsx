@@ -64,7 +64,7 @@ export default function PublicProfile() {
   }
 
   return (
-    <div className="w-screen min-h-screen bg-black text-white flex justify-center items-start px-6 py-20 font-['Poppins']">
+    <div className="w-screen min-h-screen bg-black text-white flex justify-center items-start px-6 py-20">
       <div className="w-full max-w-3xl flex flex-col gap-8">
         <h1 className="text-4xl sm:text-5xl font-bold text-center">
           Send a message
@@ -74,7 +74,7 @@ export default function PublicProfile() {
           <div className="flex flex-col gap-2">
             <Label className="text-lg">Anonymous Message to @{username}</Label>
             <Textarea
-              className="bg-white/5 border border-white/10 text-white placeholder-white/50 focus-visible:ring-1 focus-visible:ring-white/30 h-40"
+              className="bg-white/5 text-lg border border-white/10 text-white placeholder-white/50 focus-visible:ring-1 focus-visible:ring-white/30 h-40"
               placeholder="Type your message here..."
               {...register("message", { required: true })}
             />
@@ -86,7 +86,7 @@ export default function PublicProfile() {
           <Button
             variant="secondary"
             type="submit"
-            className="w-full py-5 text-lg flex items-center justify-center gap-2 hover:scale-[1.02] transition-all"
+            className="w-full py-6 text-lg flex items-center justify-center gap-2 hover:scale-[1.01] transition-all"
             disabled={isSubmitting}
           >
             {isSubmitting && <Loader2 className="w-5 h-5 animate-spin" />}

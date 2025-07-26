@@ -15,16 +15,23 @@ export async function sendOTP({email, username, password}:{email: string, userna
 }
     
 export async function verifyOTP({username, otp}:{username: string, otp: string}) {
-
     if (!otp) return
 
-    await fetch("/api/auth/verify-otp", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        username,
-        otp,
-      }),
-    })
+    try{      
+      const res = await fetch("/api/auth/verify-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username,
+          otp,
+        }),
+      })
 
+      if(res.ok){
+        return true;
+      }
+      return false
+    }catch(e){
+      return false;
+    }
   }

@@ -24,16 +24,22 @@ export function InfiniteSlider({
   const start = () => {
     if (!contentWidth) return
 
-    // Determine starting and ending x values
+    const current = x.get()
     const from = direction === "left" ? 0 : -contentWidth
     const to = direction === "left" ? -contentWidth : 0
 
-    x.set(from)
+    const distance = Math.abs(to - current)
+    const totalDistance = Math.abs(to - from)
+    const totalDuration = contentWidth / speed
+    const remainingDuration = (distance / totalDistance) * totalDuration
 
     animationRef.current = animate(x, to, {
-      duration: contentWidth / speed,
+      duration: remainingDuration,
       ease: "linear",
-      onComplete: start,
+      onComplete: () => {
+        x.set(from) // reset back to start point
+        start() // loop again
+      },
     })
   }
 

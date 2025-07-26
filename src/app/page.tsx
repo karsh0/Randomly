@@ -30,10 +30,10 @@ export default function Home() {
 
 
   return (
-    <div className="relative min-h-screen bg-black text-white font-['poppins'] overflow-hidden">
+    <div className="relative min-h-screen bg-black  text-white overflow-hidden">
 
       <motion.div
-        className="absolute bottom-[-500px] left-[50%] -translate-x-1/2 rounded-full bg-blue-600/40 w-[1200px] h-[1200px] blur-3xl"
+        className="absolute bottom-[-500px] left-[50%] -translate-x-1/2 rounded-full bg-green-500/40 w-[1200px] h-[1200px] blur-3xl"
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
         transition={{ duration: 1.2, ease: "easeOut" }}
@@ -41,12 +41,12 @@ export default function Home() {
 
       <header className="w-full px-8 md:px-20 py-6 flex justify-between items-center z-10 relative">
         <motion.h1
-          className="text-xl md:text-3xl font-bold"
+          className="text-xl md:text-2xl font-bold"
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.2 }}
         >
-          Anonymous
+          Randomly
         </motion.h1>
         <motion.div
           initial={{ scale: 0.8, opacity: 0 }}
@@ -73,17 +73,17 @@ export default function Home() {
         </motion.div>
       </header>
 
-      <main className="flex flex-col items-center justify-center h-[60vh] text-center px-6 relative z-10">
+      <main className="flex flex-col items-center justify-center h-[58vh] text-center pt-10 px-6 relative z-10">
         <motion.div
-          className="max-w-4xl space-y-6"
+          className="max-w-4xl space-y-3"
           initial={{ y: 40, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-4xl sm:text-5xl md:text-6xl font-semibold leading-tight">
+          <h2 className="text-4xl md:text-7xl font-bold leading-tighter tracking-tight">
             Dive into the world of anonymous messages.
           </h2>
-          <p className="text-lg text-white/70">
+          <p className="text-lg text-white/90">
             Where your identity remains secret.
           </p>
           <Button
@@ -102,9 +102,8 @@ export default function Home() {
       initial={{opacity:0}}
       animate={{opacity:1}}
       transition={{duration: 0.7}}>
-       <InfiniteSlider data={sampleUsers} direction="left" />
-<InfiniteSlider data={sampleUsers2} direction="right" />
-
+        <InfiniteSlider data={sampleUsers} direction="left" />
+        <InfiniteSlider data={sampleUsers2} direction="right" />
       </motion.div>
     </div>
   )
