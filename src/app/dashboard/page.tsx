@@ -75,7 +75,7 @@ export default function Dashboard() {
   },[acceptMessages])
 
   return (
-    <div className="w-full min-h-screen bg-black text-white flex justify-center items-start px-4 md:px-6 py-12 ">
+    <div className="w-full min-h-screen bg-black text-white flex flex-col md:flex-row justify-center items-start px-4 md:px-6 py-12 ">
       <motion.button
         className="bg-transparent cursor-pointer flex items-center"
         whileHover={{ x: -5 }}
@@ -107,7 +107,7 @@ export default function Dashboard() {
           <Label className="text-lg font-medium">Your anonymous message link</Label>
           <div className="relative">
             <Input
-              className="bg-white/5 text-white border border-white/10 pr-12 py-7"
+              className="bg-white/5 text-white border border-white/10 pr-12 py-7 text-xs md:text-lg"
               value={userLink}
               disabled
             />

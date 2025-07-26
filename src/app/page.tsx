@@ -88,7 +88,7 @@ export default function Home() {
           </p>
           <Button
             variant="secondary"
-            className="px-7 py-5 transition-transform hover:scale-105"
+            className="px-7 py-5 transition-transform hover:scale-[1.01]"
             onClick={() => {
               isLoggedIn ? router.push('/dashboard') : router.push('/signup')
             }}
