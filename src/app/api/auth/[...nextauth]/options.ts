@@ -2,6 +2,7 @@ import { prisma } from "@prisma/index";
 import { PrismaAdapter } from "@next-auth/prisma-adapter"
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { compare, compareSync } from "bcrypt";
 
 export const authOptions: NextAuthOptions = {
     adapter: PrismaAdapter(prisma),
@@ -21,7 +22,6 @@ export const authOptions: NextAuthOptions = {
                 const user = await prisma.user.findFirst({
                     where: {
                         username: credentials.username,
-                        password: credentials.password
                     }
                 })
 
@@ -32,8 +32,13 @@ export const authOptions: NextAuthOptions = {
                 if (!user.email_verified) {
                     throw Error("Please verify user before loggin in")
                 }
+                
+                const passwordMatch = await compare(credentials.password, user.password)
 
-                //TODO: add bcrypt compare to check passsword
+                if(!passwordMatch){
+                    throw Error("Wrong password")
+                }
+
                 return user
             },
         })

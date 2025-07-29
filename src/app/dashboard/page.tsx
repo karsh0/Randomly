@@ -75,7 +75,7 @@ export default function Dashboard() {
   },[acceptMessages])
 
   return (
-    <div className="w-full min-h-screen bg-black text-white flex flex-col md:flex-row justify-center items-start px-4 md:px-6 py-12 ">
+    <div className="w-full min-h-screen bg-black text-white flex flex-col md:flex-row justify-baseline md:justify-center items-start px-4 md:px-6 py-12 ">
       <motion.button
         className="bg-transparent cursor-pointer flex items-center"
         whileHover={{ x: -5 }}
@@ -84,7 +84,7 @@ export default function Dashboard() {
         <ArrowLeft className="w-6 h-6 cursor-pointer hover:" onClick={() => router.push('/')} />
       </motion.button>
       <motion.div
-        className="w-full max-w-4xl flex flex-col gap-10"
+        className="w-full max-w-4xl flex flex-col gap-5 md:gap-10"
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
@@ -104,7 +104,7 @@ export default function Dashboard() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
         >
-          <Label className="text-lg font-medium">Your anonymous message link</Label>
+          <Label className="text-base md:text-xl font-medium">Your anonymous message link</Label>
           <div className="relative">
             <Input
               className="bg-white/5 text-white border border-white/10 pr-12 py-7 text-xs md:text-lg"
@@ -128,7 +128,7 @@ export default function Dashboard() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
         >
-          <Label className="text-md font-medium">Accept anonymous messages?</Label>
+          <Label className="text-base md:text-lg font-medium">Accept anonymous messages?</Label>
           <Switch
             checked={acceptMessages}
             onCheckedChange={()=>{

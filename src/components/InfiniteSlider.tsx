@@ -60,10 +60,13 @@ export function InfiniteSlider({
   }, [contentWidth, direction])
 
   return (
-    <div className="overflow-hidden w-full">
+    <div className="relative overflow-hidden w-full">
+      <div className="pointer-events-none absolute top-0 left-0 h-full md:w-xs bg-gradient-to-r from-black to-transparent z-20"></div>
+      <div className="pointer-events-none absolute top-0 right-0 h-full md:w-xs bg-gradient-to-l from-black to-transparent z-20"></div>
+
       <motion.div
         ref={containerRef}
-        className="flex gap-6 px-6"
+        className="flex gap-4 sm:gap-6 px-4 sm:px-6"
         style={{ x: xTransform }}
         onMouseEnter={stop}
         onMouseLeave={start}

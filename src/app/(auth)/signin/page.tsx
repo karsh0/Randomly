@@ -7,6 +7,7 @@ import { signIn } from "next-auth/react"
 import { useForm } from "react-hook-form"
 import { Loader2 } from "lucide-react"
 import { toast, Toaster } from "sonner"
+import { compare } from "bcrypt"
 
 export default function Signin() {
   const router = useRouter()
