@@ -33,26 +33,26 @@ export default function Verify() {
   }
 
   return (
-    <div className="w-screen h-screen bg-black flex justify-center items-center px-4 text-white">
+    <div className="w-screen h-screen bg-white text-black dark:bg-black dark:text-white flex justify-center items-center px-4">
       <motion.div
-        className="w-full max-w-md bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-8 space-y-4"
+        className="w-full max-w-md bg-gray-100 dark:bg-white/5 backdrop-blur-lg border border-gray-300 dark:border-white/10 rounded-2xl p-8 space-y-4"
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
         <h2 className="text-4xl font-bold text-center">Verify Your Email</h2>
-        <p className="text-center text-white/60">
+        <p className="text-center text-gray-600 dark:text-white/60">
           Enter the 6-digit code sent to your email
         </p>
 
         <input
           ref={codeRef}
           placeholder="Enter OTP"
-          className="w-full p-2 rounded-lg border border-white/20 text-white placeholder:text-white/40 focus:outline-none focus:ring-1 focus:ring-white/40 transition-all"
+          className="w-full p-2 rounded-lg border border-gray-300 dark:border-white/20 bg-white dark:bg-transparent text-black dark:text-white placeholder:text-gray-500 dark:placeholder:text-white/40 focus:outline-none focus:ring-1 focus:ring-gray-400 dark:focus:ring-white/40 transition-all"
         />
 
         <Button
-          variant="secondary"
+          variant="default"
           className="w-full py-6 text-lg hover:scale-[1.01] transition-all flex items-center justify-center"
           onClick={handleVerify}
           disabled={isVerifying}
@@ -61,9 +61,9 @@ export default function Verify() {
           {isVerifying ? "Verifying..." : "Verify"}
         </Button>
 
-        <p className="text-sm text-center text-white/50">
+        <p className="text-sm text-center text-gray-600 dark:text-white/50">
           Didn’t receive the code?{" "}
-          <span className="underline cursor-pointer hover:text-white">
+          <span className="underline cursor-pointer hover:text-black dark:hover:text-white">
             Resend
           </span>
         </p>

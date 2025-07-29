@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import { useEffect, useState } from "react"
-import { ArrowLeft, Copy, Delete, RefreshCw, Trash, Trash2 } from "lucide-react"
+import { ArrowLeft, Copy, RefreshCw, Trash2 } from "lucide-react"
 import { toast, Toaster } from "sonner"
 import { motion } from "framer-motion"
 import { useSession } from "next-auth/react"
@@ -75,7 +75,7 @@ export default function Dashboard() {
   },[acceptMessages])
 
   return (
-    <div className="w-full min-h-screen bg-black text-white flex flex-col md:flex-row justify-baseline md:justify-center items-start px-4 md:px-6 py-12 ">
+    <div className="w-full min-h-screen dark:bg-black dark:text-white flex flex-col md:flex-row justify-baseline md:justify-center items-start px-4 md:px-6 py-12 ">
       <motion.button
         className="bg-transparent cursor-pointer flex items-center"
         whileHover={{ x: -5 }}
@@ -95,7 +95,7 @@ export default function Dashboard() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
         >
-          Welcome back, <span className="text-white/90">{username}</span>
+          Welcome back, <span className="dark:text-white/90">{username}</span>
         </motion.h1>
 
         <motion.div
@@ -107,7 +107,7 @@ export default function Dashboard() {
           <Label className="text-base md:text-xl font-medium">Your anonymous message link</Label>
           <div className="relative">
             <Input
-              className="bg-white/5 text-white border border-white/10 pr-12 py-7 text-xs md:text-lg"
+              className="bg-white/5 dark:text-white border dark:border-white/10 pr-12 py-7 text-xs md:text-lg"
               value={userLink}
               disabled
             />
@@ -123,7 +123,7 @@ export default function Dashboard() {
         </motion.div>
 
         <motion.div
-          className="flex items-center justify-between bg-white/5 border border-white/10 rounded-xl px-4 py-3"
+          className="flex items-center justify-between dark:bg-white/5 border dark:border-white/10 rounded-xl px-4 py-3"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
@@ -163,7 +163,7 @@ export default function Dashboard() {
         >
           {messages.length === 0 ? (
             <motion.div
-              className="text-gray-400 text-center col-span-full mt-6"
+              className="dark:text-gray-400 text-center col-span-full mt-6"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
             >
@@ -179,13 +179,13 @@ export default function Dashboard() {
                   show: { opacity: 1, y: 0 },
                 }}
               >
-                <Card className="bg-white/5 relative border border-white/10 text-white transition-all hover:scale-[1.01] duration-300 rounded-2xl">
+                <Card className="bg-white/5 relative border dark:border-white/10 dark:text-white transition-all hover:scale-[1.01] duration-300 rounded-2xl">
                   <Trash2 className="w-5 h-5 absolute top-3 right-5 cursor-pointer text-red-500" onClick={async()=>{
                     await deleteMessage(m.id)
                   }}/>
                   <CardContent className="px-4">
                     <div className="text-base">{m.text}</div>
-                   <div className="text-xs text-zinc-300">{new Date(m.time).toLocaleDateString()}</div>
+                   <div className="text-xs dark:text-zinc-300">{new Date(m.time).toLocaleDateString()}</div>
 
                   </CardContent>
                 </Card>
