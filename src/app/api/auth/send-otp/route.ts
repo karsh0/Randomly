@@ -37,7 +37,7 @@ export async function POST(req: Request) {
   })
 
   await transporter.sendMail({
-    from: `"Anon" <${process.env.EMAIL_FROM}>`,
+    from: `"Randomly" <${process.env.EMAIL_FROM}>`,
     to: email,
     subject: "Your OTP Code",
     text: `Your verification code is ${code}`,
