@@ -56,7 +56,7 @@ export default function Signup() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        <h2 className="text-4xl font-bold text-center mb-4">Create an Account</h2>
+        <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">Create an Account</h2>
 
         <form className="space-y-5" onSubmit={handleSubmit(handleSignup)}>
           <div>

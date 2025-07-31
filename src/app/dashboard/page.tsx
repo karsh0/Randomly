@@ -40,21 +40,16 @@ export default function Dashboard() {
     setMessages(data)
   }
 
-  const updateAccept = async () => {
-    await fetch(`/api/accept-messages`, {
-      method:"POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        acceptMessages
-      }),
-    })
+  const fetchAccept = async () => {
+    const res = await fetch(`/api/accept-messages`)
+    const data = await res.json()
+    console.log(data)
+    setAcceptMessages(data.accept)
   }
 
-  const deleteMessage = async(id: string) =>{
+  const deleteMessage = async (id: string) => {
     await fetch(`/api/delete-message`, {
-      method:"POST",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
@@ -66,16 +61,12 @@ export default function Dashboard() {
   }
 
   useEffect(() => {
-      refreshMessages()
+    refreshMessages()
+    fetchAccept()
   }, [])
 
-  
-  useEffect(()=>{
-    updateAccept()
-  },[acceptMessages])
-
   return (
-    <div className="w-full min-h-screen dark:bg-black dark:text-white flex flex-col md:flex-row justify-baseline md:justify-center items-start px-4 md:px-6 py-12 ">
+    <div className="w-full min-h-screen dark:bg-black dark:text-white flex flex-col md:flex-row justify-baseline md:justify-center items-start px-4 py-8 md:px-6 md:py-12 ">
       <motion.button
         className="bg-transparent cursor-pointer flex items-center"
         whileHover={{ x: -5 }}
@@ -107,7 +98,7 @@ export default function Dashboard() {
           <Label className="text-base md:text-xl font-medium">Your anonymous message link</Label>
           <div className="relative">
             <Input
-              className="bg-white/5 dark:text-white border dark:border-white/10 pr-12 py-7 text-xs md:text-lg"
+              className="bg-white/5 dark:text-white border dark:border-white/10 pr-12 py-5 md:py-7 text-xs md:text-lg"
               value={userLink}
               disabled
             />
@@ -131,10 +122,18 @@ export default function Dashboard() {
           <Label className="text-base md:text-lg font-medium">Accept anonymous messages?</Label>
           <Switch
             checked={acceptMessages}
-            onCheckedChange={()=>{
-              setAcceptMessages(prev => !prev)
+            onCheckedChange={async (checked) => {
+              setAcceptMessages(checked)
+              await fetch(`/api/accept-messages`, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ acceptMessages: checked }),
+              })
             }}
           />
+
         </motion.div>
 
         <motion.div
@@ -180,12 +179,12 @@ export default function Dashboard() {
                 }}
               >
                 <Card className="bg-white/5 relative border dark:border-white/10 dark:text-white transition-all hover:scale-[1.01] duration-300 rounded-2xl">
-                  <Trash2 className="w-5 h-5 absolute top-3 right-5 cursor-pointer text-red-500" onClick={async()=>{
+                  <Trash2 className="w-5 h-5 absolute top-3 right-5 cursor-pointer text-red-500" onClick={async () => {
                     await deleteMessage(m.id)
-                  }}/>
+                  }} />
                   <CardContent className="px-4">
                     <div className="text-base">{m.text}</div>
-                   <div className="text-xs dark:text-zinc-300">{new Date(m.time).toLocaleDateString()}</div>
+                    <div className="text-xs dark:text-zinc-300">{new Date(m.time).toLocaleDateString()}</div>
 
                   </CardContent>
                 </Card>

@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import { motion, useAnimation } from "framer-motion"
 import { questions, sampleUsers, sampleUsers2 } from "@/lib/sample"
 import { signOut, useSession } from "next-auth/react"
-import { useEffect, useRef } from "react"
+import { useEffect } from "react"
 import { InfiniteSlider } from "@/components/InfiniteSlider"
 import { QuestionCard } from "@/components/QuestionCard"
 import { Github, MoonIcon, Sun, Twitter } from "lucide-react"
@@ -33,7 +33,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen dark:bg-black  dark:text-white overflow-hidden">
-      <header className="w-full px-8 md:px-20 py-6 flex justify-between items-center z-10 relative">
+      <header className="w-full px-5 md:px-20 py-6 flex justify-between items-center z-10 relative">
         <motion.h1
           className="text-xl md:text-2xl font-bold"
           initial={{ y: -20, opacity: 0 }}
@@ -51,7 +51,7 @@ export default function Home() {
           {isDarkMode ? <Sun onClick={toggleDarkMode}/> : <MoonIcon onClick={toggleDarkMode}/>}
           {
             isLoggedIn ? <Button
-              className="rounded-2xl px-6 py-2 transition-all hover:scale-[1.02] bg-red-500 text-white hover:bg-red-600"
+              className="rounded-2xl px-4 md:px-6 py-2 transition-all hover:scale-[1.02] bg-red-500 text-white hover:bg-red-600"
               variant="secondary"
               onClick={() => {
                 signOut()
@@ -59,7 +59,7 @@ export default function Home() {
             >
               Logout
             </Button> : <Button
-              className="rounded-2xl px-6 py-2 transition-all hover:scale-[1.02]"
+              className="rounded-2xl px-4 md:px-6 py-2 transition-all hover:scale-[1.02]"
               variant="default"
               onClick={() => router.push("/signin")}
             >
@@ -76,7 +76,7 @@ export default function Home() {
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-4xl md:text-7xl font-bold leading-tighter tracking-tight">
+          <h2 className="text-3xl md:text-7xl font-bold leading-tighter tracking-tight">
             Dive into the World of Anonymous Messages.
           </h2>
           <p className="text-sm md:text-lg dark:text-white/90">
@@ -103,7 +103,7 @@ export default function Home() {
         <InfiniteSlider data={sampleUsers2} direction="right" />
       </motion.div>
 
-      <div className="flex flex-col justify-center items-center py-30 px-5 mx-auto gap-5">
+      <div className="flex flex-col justify-center items-center py-20 md:py-30 px-5 mx-auto gap-5">
         <span className="text-4xl md:text-6xl text-center font-semibold mb-10">Receive Instant Messages</span>
 
         {questions.map((q, idx) => (
@@ -132,7 +132,7 @@ export default function Home() {
 
 
       <footer className="w-full px-6 py-4 flex items-center justify-between dark:text-white text-sm dark:bg-black">
-        <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-white">
+        <span className="font-bold">
           Randomly
         </span>
 

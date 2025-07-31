@@ -66,8 +66,6 @@ export async function POST(req: NextRequest){
             { status: 404 }
         )
     }
-
-
     return NextResponse.json({
         message:'Message acceptance status updated successfully'
     })
