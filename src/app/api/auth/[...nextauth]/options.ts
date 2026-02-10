@@ -5,6 +5,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { compare, compareSync } from "bcryptjs";
 
 export const authOptions: NextAuthOptions = {
+    //@ts-ignore
     adapter: PrismaAdapter(prisma),
     providers: [
         CredentialsProvider({
