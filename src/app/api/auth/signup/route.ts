@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@prisma/index";
-import { hash } from "bcrypt"
+import { hash } from "bcryptjs"
 
 export async function POST(req: NextRequest){
     const {username, email, password} = await req.json()
